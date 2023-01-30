@@ -7,12 +7,16 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float mainThrust = 100f;
     [SerializeField] private float rotationThrust = 1f;
+    [SerializeField] private AudioClip mainEngine;
 
     private Rigidbody playerRB;
+    private AudioSource audioSource;
+    private bool isTransitioning;
 
     private void Awake()
     {
         playerRB = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -26,6 +30,15 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             playerRB.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+
+            if (!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(mainEngine);
+            }
+        }
+        else
+        {
+            audioSource.Stop();
         }
     }
 
